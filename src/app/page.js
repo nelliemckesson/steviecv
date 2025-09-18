@@ -1,3 +1,6 @@
+"use client";
+
+import React, { useState } from 'react';
 import Resume from "../components/Resume";
 
 export default function Home() {
@@ -7,7 +10,7 @@ export default function Home() {
     'phone': {'value': '', 'label': "Phone number", 'position': 3},
     'city': {'value': '', 'label': "City", 'position': 4}
   });
-  const [fieldCounter, setFieldCounter] = useState(5);
+  const [contactFieldCounter, setContactFieldCounter] = useState(5);
 
   const updateField = (key, newValue, setFields) => {
     setFields(prev => ({
@@ -16,10 +19,18 @@ export default function Home() {
     }));
   };
 
-  const addFieldAbove = (targetPosition) => {
+  const fieldCountersMap = {
+    'contact': {'counter': contactFieldCounter, 'setCounter': setContactFieldCounter}
+  }
+
+  const addFieldAbove = (
+    targetPosition, 
+    setFields, 
+    fieldsType
+  ) => {
     const fieldLabel = prompt('Enter a label for the new field:');
     if (fieldLabel && fieldLabel.trim()) {
-      const newFieldKey = `field_${fieldCounter}`;
+      const newFieldKey = `field_${fieldCountersMap[fieldsType].counter}`;
       setFields(prev => {
         const updatedFields = { ...prev };
         Object.keys(updatedFields).forEach(key => {
@@ -34,14 +45,14 @@ export default function Home() {
         };
         return updatedFields;
       });
-      setFieldCounter(prev => prev + 1);
+      fieldCountersMap[fieldsType].setCounter(prev => prev + 1);
     }
   };
 
-  const addFieldToEnd = () => {
+  const addFieldToEnd = (fields, setFields, fieldsType) => {
     const fieldLabel = prompt('Enter a label for the new field:');
     if (fieldLabel && fieldLabel.trim()) {
-      const newFieldKey = `field_${fieldCounter}`;
+      const newFieldKey = `field_${fieldCountersMap[fieldsType].counter}`;
       setFields(prev => {
         const updatedFields = { ...prev };
         updatedFields[newFieldKey] = {
@@ -51,7 +62,7 @@ export default function Home() {
         };
         return updatedFields;
       });
-      setFieldCounter(prev => prev + 1);
+      fieldCountersMap[fieldsType].setCounter(prev => prev + 1);
     }
   };
 
@@ -65,6 +76,8 @@ export default function Home() {
           updateField={updateField} 
           addFieldAbove={addFieldAbove} 
           addFieldToEnd={addFieldToEnd} 
+          contactFields={contactFields}
+          setContactFields={setContactFields}
         />
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

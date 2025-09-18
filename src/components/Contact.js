@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 
 const Contact = (props) => {
 	const [isEditMode, setIsEditMode] = useState(false);
-	
+	const { fields, setFields } = props;
+
 	return (
 		<div className="section-container">
 		  <div className="section-buttons">
@@ -26,7 +27,13 @@ const Contact = (props) => {
 							<div key={key}>
 								<div className="add-field">
 									<button
-										onClick={() => addFieldAbove(field.position)}
+										onClick={() => {
+											props.addFieldAbove(
+												field.position, 
+												setFields, 
+												"contact"
+											)
+										}}
 									>
 										+
 									</button>
@@ -34,14 +41,20 @@ const Contact = (props) => {
 								<ContactInput
 									label={field.label}
 									value={field.value}
-									updateField={(newValue) => updateField(key, newValue)}
+									updateField={(newValue) => props.updateField(key, newValue, setFields)}
 								/>
 							</div>
 						))
 					}
 					<div className="add-field">
 						<button
-							onClick={() => addFieldToEnd()}
+							onClick={() => {
+								addFieldToEnd(
+								  fields,
+									setFields, 
+									"contact"
+								)
+							}}
 						>
 							+
 						</button>
@@ -64,7 +77,7 @@ const Contact = (props) => {
 const ContactInput = ({ label, value, updateField }) => {
 	return (
 		<div>
-			<label>{label}</label>
+			<label>{label}: </label>
 			<input
 				type="text"
 				value={value}

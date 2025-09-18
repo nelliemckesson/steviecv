@@ -29,6 +29,10 @@ button {
   cursor: pointer;
 }
 
+input {
+  border: 1px solid #d8d8d8;
+}
+
 .main-container {
   padding: 40px;
 }
