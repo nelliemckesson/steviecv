@@ -3,11 +3,20 @@
 import React, { useState } from 'react';
 
 const Contact = (props) => {
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const [phone, setPhone] = useState('');
-	const [city, setCity] = useState('');
+	const [fields, setFields] = useState({
+		'name': {'value': '', 'label': "Name", 'position': 1},
+		'email': {'value': '', 'label': "Email address", 'position': 2},
+		'phone': {'value': '', 'label': "Phone number", 'position': 3},
+		'city': {'value': '', 'label': "City", 'position': 4}
+	});
 	const [isEditMode, setIsEditMode] = useState(false);
+
+	const updateField = (key, newValue) => {
+		setFields(prev => ({
+			...prev,
+			[key]: { ...prev[key], value: newValue }
+		}));
+	};
 
 	return (
 		<div className="section-container">
@@ -17,48 +26,48 @@ const Contact = (props) => {
 			
 			{isEditMode ? (
 				<div>
-					<div>
-						<label>Name: </label>
-						<input 
-							type="text" 
-							value={name} 
-							onChange={(e) => setName(e.target.value)} 
-						/>
-					</div>
-					<div>
-						<label>Email: </label>
-						<input 
-							type="email" 
-							value={email} 
-							onChange={(e) => setEmail(e.target.value)} 
-						/>
-					</div>
-					<div>
-						<label>Phone: </label>
-						<input 
-							type="tel" 
-							value={phone} 
-							onChange={(e) => setPhone(e.target.value)} 
-						/>
-					</div>
-					<div>
-						<label>City: </label>
-						<input 
-							type="text" 
-							value={city} 
-							onChange={(e) => setCity(e.target.value)} 
-						/>
-					</div>
+					{Object.entries(fields)
+						.sort(([, a], [, b]) => a.position - b.position)
+						.map(([key, field]) => (
+							<ContactInput
+								key={key}
+								label={field.label}
+								value={field.value}
+								updateField={(newValue) => updateField(key, newValue)}
+							/>
+						))
+					}
 				</div>
 			) : (
 				<div>
-					<p>{name || "My Name"}</p>
-					<p>{email || "Email address"}</p>
-					<p>{phone || "Phone number"}</p>
-					<p>{city || "My City"}</p>
+					{Object.entries(fields)
+						.sort(([, a], [, b]) => a.position - b.position)
+						.map(([key, field]) => (
+							<ContactItem key={key} {...field} />
+						))
+					}
 				</div>
 			)}
 		</div>
+	);
+}
+
+const ContactInput = (label, value, updateField) => {
+	return (
+		<div>
+			<label>{label}</label>
+			<input 
+				type="text" 
+				value={value} 
+				onChange={(e) => updateField(e.target.value)} 
+			/>
+		</div>
+	);
+}
+
+const ContactItem = (item) => {
+	return (
+		<p>{item.value || item.label}</p>
 	);
 }
 
