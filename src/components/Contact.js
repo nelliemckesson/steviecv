@@ -10,6 +10,7 @@ const Contact = (props) => {
 		'city': {'value': '', 'label': "City", 'position': 4}
 	});
 	const [isEditMode, setIsEditMode] = useState(false);
+	const [fieldCounter, setFieldCounter] = useState(5);
 
 	const updateField = (key, newValue) => {
 		setFields(prev => ({
@@ -18,25 +19,86 @@ const Contact = (props) => {
 		}));
 	};
 
+	const addFieldAbove = (targetPosition) => {
+		const fieldLabel = prompt('Enter a label for the new field:');
+		if (fieldLabel && fieldLabel.trim()) {
+			const newFieldKey = `field_${fieldCounter}`;
+			setFields(prev => {
+				const updatedFields = { ...prev };
+				Object.keys(updatedFields).forEach(key => {
+					if (updatedFields[key].position >= targetPosition) {
+						updatedFields[key] = { ...updatedFields[key], position: updatedFields[key].position + 1 };
+					}
+				});
+				updatedFields[newFieldKey] = {
+					value: '',
+					label: fieldLabel.trim(),
+					position: targetPosition
+				};
+				return updatedFields;
+			});
+			setFieldCounter(prev => prev + 1);
+		}
+	};
+
+	const addFieldToEnd = () => {
+		const fieldLabel = prompt('Enter a label for the new field:');
+		if (fieldLabel && fieldLabel.trim()) {
+			const newFieldKey = `field_${fieldCounter}`;
+			setFields(prev => {
+				const updatedFields = { ...prev };
+				updatedFields[newFieldKey] = {
+					value: '',
+					label: fieldLabel.trim(),
+					position: Object.keys(fields).length + 1
+				};
+				return updatedFields;
+			});
+			setFieldCounter(prev => prev + 1);
+		}
+	};
+
 	return (
 		<div className="section-container">
-			<button className="edit-mode" onClick={() => setIsEditMode(!isEditMode)}>
-				{isEditMode ? 'Save' : 'Edit'}
-			</button>
+		  <div className="section-buttons">
+				<button className="edit-mode" onClick={() => setIsEditMode(!isEditMode)}>
+					{isEditMode ? 'Save' : 'Edit'}
+				</button>
+				{isEditMode && (
+					<button className="edit-mode" onClick={() => setIsEditMode(false)}>
+						Cancel
+					</button>
+				)}
+			</div>
 			
 			{isEditMode ? (
 				<div>
 					{Object.entries(fields)
 						.sort(([, a], [, b]) => a.position - b.position)
 						.map(([key, field]) => (
-							<ContactInput
-								key={key}
-								label={field.label}
-								value={field.value}
-								updateField={(newValue) => updateField(key, newValue)}
-							/>
+							<div key={key}>
+								<div className="add-field">
+									<button
+										onClick={() => addFieldAbove(field.position)}
+									>
+										+
+									</button>
+								</div>
+								<ContactInput
+									label={field.label}
+									value={field.value}
+									updateField={(newValue) => updateField(key, newValue)}
+								/>
+							</div>
 						))
 					}
+					<div className="add-field">
+						<button
+							onClick={() => addFieldToEnd()}
+						>
+							+
+						</button>
+					</div>
 				</div>
 			) : (
 				<div>
@@ -52,14 +114,14 @@ const Contact = (props) => {
 	);
 }
 
-const ContactInput = (label, value, updateField) => {
+const ContactInput = ({ label, value, updateField }) => {
 	return (
 		<div>
 			<label>{label}</label>
-			<input 
-				type="text" 
-				value={value} 
-				onChange={(e) => updateField(e.target.value)} 
+			<input
+				type="text"
+				value={value}
+				onChange={(e) => updateField(e.target.value)}
 			/>
 		</div>
 	);
