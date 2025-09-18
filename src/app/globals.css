@@ -25,8 +25,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button {
+  cursor: pointer;
+}
+
 .main-container {
   padding: 40px;
+}
+
+.downloads-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.downloads-container button {
+  color: white;
+  background-color: #fc59a3;
+  border-radius: 5px;
+  padding: 1px 5px 1px;
 }
 
 /* Shared */
@@ -48,7 +64,6 @@ body {
   border: 1px solid #d8d8d8;
   border-radius: 5px;
   padding: 1px 5px 1px;
-  cursor: pointer;
   margin-right: 20px;
   margin-bottom: 10px;
 }
@@ -62,7 +77,6 @@ body {
   text-align: left;
   width: 100%;
   color: gray;
-  cursor: pointer;
   padding: 0px;
 }
 
@@ -77,7 +91,6 @@ body {
   height: 20px;
   border: 1px solid black;
   border-radius: 10px;
-  cursor: pointer;
 }
 
 .add-field button:hover {
