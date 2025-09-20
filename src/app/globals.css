@@ -76,6 +76,53 @@ input {
   background-color: #ffd400;
 }
 
+/* Login page */
+
+.login {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  max-width: 1000px;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login .product {
+  border: 1px solid #d8d8d8;
+  padding: 20px;
+}
+
+.login .product h1 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.login form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.login fieldset {
+  margin-top: 10px;
+}
+
+.login input {
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 250px;
+}
+
+.login button {
+  margin-right: 10px;
+}
+
+.login button:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
 /* Custom fields */
 .add-field {
   text-align: left;
