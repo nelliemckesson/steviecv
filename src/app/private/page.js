@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import Resume from "../../components/Resume";
-import { fetchContactData } from '@/db';
+import { fetchContactData, setContactData } from '@/db';
 
 export default function Home() {
   const supabase = createClient();
@@ -19,6 +19,10 @@ export default function Home() {
     'city': {'value': '', 'label': "City", 'position': 4}
   });
   const [contactFieldCounter, setContactFieldCounter] = useState(5);
+
+  const handleSave = () => {
+    setContactData(user.id, contactFields, supabase);
+  }
 
   // Update an app data field
   const updateField = (key, newValue, setFields) => {
@@ -95,7 +99,7 @@ export default function Home() {
     const loadContactData = async () => {
       if (!user?.id) return;
 
-      const contactData = await fetchContactData(user.id);
+      const contactData = await fetchContactData(user.id, supabase);
 
       if (contactData?.fields) {
         setContactFields(contactData.fields);
@@ -103,7 +107,7 @@ export default function Home() {
     };
 
     loadContactData();
-  }, [user]);
+  }, [user, supabase]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -121,6 +125,7 @@ export default function Home() {
           addFieldToEnd={addFieldToEnd}
           contactFields={contactFields}
           setContactFields={setContactFields}
+          handleSave={handleSave}
         />
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

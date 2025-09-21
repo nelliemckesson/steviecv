@@ -1,10 +1,4 @@
-import { createClient } from '@/utils/supabase/client';
-
-export async function fetchContactData(userId) {
-  const supabase = createClient();
-
-  console.log(userId);
-
+export async function fetchContactData(userId, supabase) {
   let { data: Contact, error } = await supabase
     .from('Contact')
     .select('fields')
@@ -22,4 +16,17 @@ export async function fetchContactData(userId) {
   }
 
   return null;
+}
+
+export async function setContactData(userId, fields, supabase) {
+  let { error } = await supabase.from('Contact').upsert({
+    fields: fields
+  });
+
+  if (error) {
+    console.error('Error setting contact data:', error);
+    return null;
+  }
+
+  return true;
 }

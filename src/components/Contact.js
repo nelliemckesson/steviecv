@@ -6,10 +6,17 @@ const Contact = (props) => {
 	const [isEditMode, setIsEditMode] = useState(false);
 	const { fields, setFields } = props;
 
+	const handleToggleEditMode = () => {
+		if (isEditMode) {
+			props.handleSave();
+		}
+		setIsEditMode(prev => !prev);
+	}
+
 	return (
 		<div className="section-container">
 		  <div className="section-buttons">
-				<button className="edit-mode" onClick={() => setIsEditMode(!isEditMode)}>
+				<button className="edit-mode" onClick={() => handleToggleEditMode()}>
 					{isEditMode ? 'Save' : 'Edit'}
 				</button>
 				{isEditMode && (

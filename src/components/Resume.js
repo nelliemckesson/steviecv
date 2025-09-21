@@ -12,6 +12,7 @@ const Resume = (props) => {
         addFieldToEnd={props.addFieldToEnd} 
         fields={props.contactFields}
         setFields={props.setContactFields}
+        handleSave={props.handleSave}
       />
     </div>
 	);
