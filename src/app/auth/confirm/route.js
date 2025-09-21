@@ -10,13 +10,28 @@ export async function GET(request) {
   if (token_hash && type) {
     const supabase = await createClient();
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       type,
       token_hash,
-    })
+    });
+
     if (!error) {
+      // Initialize the default user data:
+      // Contact record
+      if (data?.user?.id) {
+        const { error: contactError } = await supabase
+          .from('Contact')
+          .insert([
+            { user: data.user.id }
+          ]);
+
+        if (contactError) {
+          console.error('Error creating contact record:', contactError);
+        }
+      }
+
       // redirect user to specified redirect URL or root of app
-      redirect(next)
+      redirect(next);
     }
   }
 

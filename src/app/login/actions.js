@@ -21,7 +21,7 @@ export async function login(formData) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect('/private');
 }
 
 export async function signup(formData) {
